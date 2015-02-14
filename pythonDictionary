@@ -1,0 +1,111 @@
+#-------------------#
+# Python Dictionary #
+#-------------------#
+
+# Printing something
+#
+# print "hello gidy!"
+
+# Variables
+#
+# x = 2
+# str = "hello"
+# str1 = "hello'\""
+# a,b = 1,2   # (a=1 , b=2)
+# if isinstance(x, float):
+	
+# Conditions
+# x = 1
+# if x>5:
+#	print "x is greater than 5!"
+# elif x>2:
+# 	print "x is greater than 2!"
+# else:
+# 	print "x is small"
+# if "":
+# 	print "not empty"
+# else:
+#	print "empty"
+# x = [2]
+# y = [2]
+# if (x == y):   # True
+# 	print "x == y"
+# if (x is y):  # False (the instances are not the same)
+#	print "x is y"
+# print 1 == 2 # Prints False
+	
+# Lists
+#
+# list1 = ["a", "b"]
+# list1.append("c")
+# for a in list1:
+#	print a
+
+# Strings
+# a10 = "a" * 10
+# print a10
+# print ['a','b'] * 5  
+# name = "Gidy"
+# print "Hello, %s" % name
+# str = "This is a long string"
+# print len(str), str.index("i"), str.count("i"), str[1:3], str[17:], str[:3]
+# print str[15:-3]  #-3 means 3 from the end
+# print str.upper(), str.lower()
+# wordsList = str.split(" ")
+# for word in wordsList:
+#	print word
+
+# Loops
+# for x in range(5,9):
+#	print x
+
+# Functions
+# def func(a, b):
+#	return a+b
+# print func(3,2)  # From outside the function
+
+# Classes 
+# class MyClass:
+   # name = "Gidy"
+   # age = 27
+   
+   # def func(self):
+   # print self.name
+	
+# obj = MyClass()
+# obj.name = "Basin"
+# obj.func()
+
+# Dictionary
+# ppl = {}
+# ppl["Gidy"] = 27
+# ppl["Alisa"] = 23
+# ppl["Dina"] = 30
+# for name,age in ppl.iteritems():
+	# print name, age
+# del ppl["Alisa"]
+# print
+# for name,age in ppl.iteritems():
+	# print name, age
+	
+# Packages (Uses MyModule.py)
+# import MyModule
+
+# obj = MyModule.MyClass()
+# obj.name = "BASIN"
+# obj.printName()
+
+# (uses dirPackage directory)
+# from dirPackage import MyModule2
+# obj = MyModule2.MyClass2()
+# obj.printName()
+
+
+
+
+
+
+
+
+	
+
