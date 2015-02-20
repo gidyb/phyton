@@ -1,17 +1,13 @@
 import urllib
 import json
 
-def getTopBoxOfficeMovies():
+# Returns the 10 Top US Box Office movie names and their average
+# (critics & audience) ratings
+def getTopBoxOfficeMovieNamesAndRatings():
 	bestMoviesUrl = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8b22adt8wam7ned65u2nreqq"
 	searchResultsJSON = urllib.urlopen(bestMoviesUrl)
 		
-	return getMovieTitles(searchResultsJSON)
-	
-
-		
-def getMovieTitles(searchResultsJSON):
-	
-	movieTitles = []
+	movieNamesRatings = {}
 
 	# Pass empty lines
 	lineStr = searchResultsJSON.readline().strip()
@@ -29,8 +25,28 @@ def getMovieTitles(searchResultsJSON):
 		except ValueError:
 		# There is no year in the movie
 			continue;
-			
-		movieTitles.append(parts[partIndex][titleStartIndex:titleEndIndex])
 		
-	return movieTitles	
-		
+		title = parts[partIndex][titleStartIndex:titleEndIndex]
+		rating = getAverageMovieRating(title,parts[partIndex])
+		movieNamesRatings[title] = rating
+	
+	return movieNamesRatings	
+	
+# Returns the average rating (critics & audience) of the given movie name
+# from the given JSON search result	
+def getAverageMovieRating(movieName, jsonResult):
+	
+	# Get critics rating
+	criticsRatingIndex = jsonResult.index("critics_score") + 15
+	criticsRating = int(jsonResult[criticsRatingIndex : criticsRatingIndex + 2])
+
+	# Get audience rating
+	audienceRatingIndex = jsonResult.index("audience_score") + 16
+	audienceRating = int(jsonResult[audienceRatingIndex : audienceRatingIndex + 2])
+
+	# Return the average rating
+	averageRating = (criticsRating + audienceRating) / 2
+	return averageRating
+	
+	
+	
