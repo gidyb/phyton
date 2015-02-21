@@ -1,4 +1,5 @@
 import urllib
+import json
 
 # Returns the result of searching IMDB by movie name
 def getImdbSearchResults(movieName):
@@ -12,23 +13,10 @@ def getImdbByMovieId(movieId):
 	movieUrl = basicUrl + movieId
 	return urllib.urlopen(movieUrl)
 
-# Returns the movie genre from the given json search result of a movie
-def getMovieGenre(jsonMovie):
-	genreStartIndex = jsonMovie.index("Genre") + 8
-	genreEndIndex = jsonMovie.index("Director") - 3
-	genre = jsonMovie[genreStartIndex:genreEndIndex]
-	return genre	
-
-# Return the movie rating from the given json search result of a movie	
-def getMovieRating(jsonMovie):
-	ratingIndex = jsonMovie.index("imdbRating")
-	return jsonMovie[ratingIndex+13:ratingIndex+16]	
-	
-	
-# Returns the IMDB rating and genre of the given movie name in (rating,genre) format
+# Returns the IMDB rating (if such exists, 'N/A' otherwise) and genre of the given movie name in (rating,genre) format
 #
 # The 1st IMDB search result (by movie name) is taken into account
-# The rating is on 1-10 scale
+# The rating is on 10-100 scale
 def getMovieRatingAndGenre(movieName):	
 	# Get first movie id 			
 	titleSearchResults = getImdbSearchResults(movieName)
@@ -45,9 +33,13 @@ def getMovieRatingAndGenre(movieName):
 
 	# Get movie Rating
 	idSearchResults = getImdbByMovieId(movieId)
-	idSearchJson = idSearchResults.readline()
+	idSearchJson = json.loads(idSearchResults.readline())
 	
-	rating = getMovieRating(idSearchJson)
-	genre = getMovieGenre(idSearchJson)
+	rating = idSearchJson['imdbRating']
+	if (rating <> 'N/A'):
+		rating = int(float(rating) * 10)
+		
+	genre = idSearchJson['Genre']
+	
 	return rating,genre
 	
