@@ -5,3 +5,10 @@ ver 1.0 - Searches for 10 Top Box Office movies in RottenTomatoes and prints the
           
 ver 2.0 - Top DVD Rentals added - now 2 lists are printed - top box office and top dvd rentals. In addition, the movie 
           genre is printed
+          
+ver 2.5 - Metacritic site ratings added.
+          All ratings use JSON formatting
+
+
+# Requirements
+Unirest lib - for easier http get requests - http://unirest.io/python.html
