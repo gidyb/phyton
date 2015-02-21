@@ -1,22 +1,20 @@
-import rottenTomatoesUtils
 import movieFinderUtils
+import rottenTomatoesUtils
+import mailUtils
+import time
+from datetime import datetime, timedelta
 
-# Top Box Office movies
-#***********************
-topBoxOfficeMoviesAndRatings = rottenTomatoesUtils.getTopBoxOfficeMovieNamesAndRatings()
-movieFinderUtils.printLabel("Top Box Office Movies:")
-movieFinderUtils.printMovieNamesAndAverageRatings(topBoxOfficeMoviesAndRatings)
+newLine = '\r\n'
 
-print
-print
+mailSender = mailUtils.GmailSender()
+mailingList = mailUtils.getMailingList()
 
-# Top DVD Rentals movies
-#***********************
-topDvdRentalsAndRatings = rottenTomatoesUtils.getTopDvdRentalsMovieNamesAndRatings()
-movieFinderUtils.printLabel("Top DVD Rentals Movies:")
-movieFinderUtils.printMovieNamesAndAverageRatings(topDvdRentalsAndRatings)
+while(True):
 
+	for recepient, address in mailingList.iteritems():		
+		moviesEmail = "Hello " + recepient + "!" + newLine * 2
+		moviesEmail = moviesEmail + movieFinderUtils.getMoviesMail()
+		mailSender.send_message(address,"Your MovieMaster Update", moviesEmail)
 	
-# Wait for input so that the cmd window won't close	
-print
-var = raw_input("Press any key to continue...")
+	# Sleep for 1 hour
+	time.sleep(3600)
