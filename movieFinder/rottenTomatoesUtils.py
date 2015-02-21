@@ -17,48 +17,14 @@ def getTopDvdRentalsMovieNamesAndRatings():
 	
 # Returns the movie names and average ratings from the given RottenTomatoes search URL
 def getMovieNamesAndRatingsFromJson(searchURL):
-
 	searchResultsJSON = urllib.urlopen(searchURL)
-
+	movieTitles = json.load(searchResultsJSON)['movies']
+	
 	movieNamesRatings = {}
-
-	# Pass empty lines
-	lineStr = searchResultsJSON.readline().strip()
-	while (not lineStr):
-		lineStr = searchResultsJSON.readline().strip()
 	
-	# Find movie titles
-	parts = lineStr.split("title")
-	for partIndex in range(1,11):
-	
-		titleStartIndex = 3
-		
-		try:
-			titleEndIndex = parts[partIndex].index("year") - 3
-		except ValueError:
-		# There is no year in the movie
-			continue;
-		
-		title = parts[partIndex][titleStartIndex:titleEndIndex]
-		rating = getAverageMovieRating(title,parts[partIndex])
-		movieNamesRatings[title] = rating
+	for movieInfo in movieTitles:
+		averageRating = int((movieInfo['ratings']['critics_score'] + movieInfo['ratings']['audience_score']) / 2)	
+		movieNamesRatings[movieInfo['title']] = averageRating
 	
 	return movieNamesRatings	
-	
-	
-# Returns the average rating (critics & audience) of the given movie name
-# from the given JSON search result	
-def getAverageMovieRating(movieName, jsonResult):
-	
-	# Get critics rating
-	criticsRatingIndex = jsonResult.index("critics_score") + 15
-	criticsRating = int(jsonResult[criticsRatingIndex : criticsRatingIndex + 2])
-
-	# Get audience rating
-	audienceRatingIndex = jsonResult.index("audience_score") + 16
-	audienceRating = int(jsonResult[audienceRatingIndex : audienceRatingIndex + 2])
-
-	# Return the average rating
-	averageRating = (criticsRating + audienceRating) / 2
-	return averageRating	
 	
