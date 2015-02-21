@@ -1,5 +1,9 @@
 import imdbUtils
 import metacriticUtils
+import rottenTomatoesUtils
+from datetime import datetime
+
+newLine = '\r\n'
 
 # Returns the average of the given movie ratings, ignoring null ratings
 def getAverageRating(imdbRating, tomatoesRating, metacriticRating):
@@ -17,8 +21,8 @@ def getAverageRating(imdbRating, tomatoesRating, metacriticRating):
 	return int(sum(validRatings)/len(validRatings))
 	
 
-# Prints a list of the given movies, their genre and the average rating between the given
-# RottenTomatoes rating and IMDB rating
+# Prints a list of the given movies, their genre and the average rating between various sites
+# Needed for the CMD version - MovieFinder
 def printMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
 	for movie,tomatoesRating in movieNamesAndTomatoesRatings.iteritems():
 		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movie)
@@ -31,9 +35,62 @@ def printMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
 		print movie + "  (" + genre + "),  " + "Rating: ", averageRating
 		
 		
-# Prints the given label nicely	
+# Prints the given label nicely	to the cmd
 def printLabel(label):
 	print "**********************"
 	print label
 	print "**********************"
 	print		
+	
+
+# Returns a list of the given movies, their genre and the average rating between various sites
+# Needed for the Server version - MovieMaster	
+def	getMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
+
+	moviesList = []
+
+	for movie,tomatoesRating in movieNamesAndTomatoesRatings.iteritems():
+		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movie)
+		metacriticRating = metacriticUtils.getMovieRating(movie)
+		averageRating = getAverageRating(imdbRating, tomatoesRating, metacriticRating)
+	
+		movieLine = movie + "  (" + genre + "),  " + "Rating: " + str(averageRating)	
+		moviesList.append(movieLine)
+
+	return moviesList
+	
+	
+# Returns an email version of the given movies list, which include movie names and their ratings
+def getEmailFormatList(moviesList):
+	emailMsg = ""
+
+	for movie in moviesList:
+		emailMsg = emailMsg + movie + newLine
+		
+	return emailMsg	
+
+# Returns a plain/text (FOR NOW) mail msg with top movies and ratings	
+def getMoviesMail():
+
+	curTime = datetime.now()
+	
+	moviesEmail = "This is your MovieMaster update for " + curTime.strftime("%A, %d of %B %Y, %H:%M") + newLine * 2
+	
+	# Top Box Office Movies
+	moviesEmail = moviesEmail + "Top Box Office Movies" + newLine
+	moviesEmail = moviesEmail + "*************************" + newLine
+
+	topBoxOffice = rottenTomatoesUtils.getTopBoxOfficeMovieNamesAndRatings()
+	moviesList = getMovieNamesAndAverageRatings(topBoxOffice)
+	moviesEmail = moviesEmail + getEmailFormatList(moviesList)
+
+	# Top DVD Rentals
+	moviesEmail = moviesEmail + newLine 
+	moviesEmail = moviesEmail + "Top DVD Rentals" + newLine
+	moviesEmail = moviesEmail + "*******************" + newLine
+
+	topDVDs = rottenTomatoesUtils.getTopDvdRentalsMovieNamesAndRatings()
+	dvdsList = getMovieNamesAndAverageRatings(topDVDs)
+	moviesEmail = moviesEmail + getEmailFormatList(dvdsList)
+
+	return moviesEmail	
