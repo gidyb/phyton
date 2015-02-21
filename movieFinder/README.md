@@ -8,7 +8,7 @@ ver 2.0 - Top DVD Rentals added - now 2 lists are printed - top box office and t
           
 ver 2.5 - Metacritic site ratings added. All ratings use JSON formatting
           
-ver 3.0 - Project name changed to 'MovieMaster'. Now the script runs periodically and sends an email with all the current top movies and their ratings to a given mailing list          
+ver 3.0 - The script runs periodically and sends an email with all the current top movies and their ratings to a given mailing list          
 
 
 # Requirements
