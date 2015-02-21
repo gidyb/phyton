@@ -1,4 +1,4 @@
-# Movie Master
+# Movie Finder
 
 ver 1.0 - Searches for 10 Top Box Office movies in RottenTomatoes and prints their names and their average rating from 
           RottenTomatoes and IMDB
