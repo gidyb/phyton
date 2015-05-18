@@ -27,7 +27,7 @@ def getMovieRatingAndGenre(movieName):
 	except ValueError:
 		# Search returned no movies
 		print "There are no movies named" , movieName
-		return -1
+		return -1, "None"
 		
 	movieId = searchJson[firstIdIndex:firstIdIndex+9]
 
@@ -35,7 +35,11 @@ def getMovieRatingAndGenre(movieName):
 	idSearchResults = getImdbByMovieId(movieId)
 	idSearchJson = json.loads(idSearchResults.readline())
 	
-	rating = idSearchJson['imdbRating']
+	try:
+		rating = idSearchJson['imdbRating']
+	except KeyError:
+		return -1,"None"
+		
 	if (rating <> 'N/A'):
 		rating = int(float(rating) * 10)
 		
