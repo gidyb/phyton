@@ -11,12 +11,17 @@ mailingList = mailUtils.getMailingList()
 
 while(True):
 
-	for recepient, address in mailingList.iteritems():		
-		moviesEmail = "Hello " + recepient + "!" + newLine * 2
-		print str(datetime.now()) + ": Creating mail"
-		moviesEmail = moviesEmail + movieFinderUtils.getMoviesMail()
-		print str(datetime.now()) +  ": Sending Mail"
-		mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
-	
-	# Sleep for 1 hour
-	time.sleep(3600)
+        for recepient, address in mailingList.iteritems():
+                moviesEmail = "Hello " + recepient + "!" + newLine * 2
+                print str(datetime.now()) + ": Creating mail"
+                print
+                print "Movies:"
+                print "******"
+                moviesEmail = moviesEmail + movieFinderUtils.getMoviesMail()
+                print
+                print str(datetime.now()) +  ": Sending Mail"
+                print
+                mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
+
+        # Sleep for 1 hour
+        time.sleep(3600)
