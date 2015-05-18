@@ -30,10 +30,10 @@ def printMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
 		averageRating = getAverageRating(imdbRating, tomatoesRating, metacriticRating)
 		
 		# DEBUG PRINT - all ratings
-		# print movie + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", tomatoesRating, " Meta: ", metacriticRating, " Average:", averageRating
+		print movie + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", tomatoesRating, " MetaCritic: ", metacriticRating, " Average:", averageRating
 		
 		print movie + "  (" + genre + "),  " + "Rating: ", averageRating
-		
+	
 		
 # Prints the given label nicely	to the cmd
 def printLabel(label):
@@ -53,6 +53,9 @@ def	getMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
 		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movie)
 		metacriticRating = metacriticUtils.getMovieRating(movie)
 		averageRating = getAverageRating(imdbRating, tomatoesRating, metacriticRating)
+		
+		# DEBUG PRINT - all ratings
+		print movie + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", tomatoesRating, " MetaCritic: ", metacriticRating, " Average:", averageRating
 	
 		movieLine = movie + "  (" + genre + "),  " + "Rating: " + str(averageRating)	
 		moviesList.append(movieLine)
