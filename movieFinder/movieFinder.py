@@ -13,9 +13,9 @@ while(True):
 
 	for recepient, address in mailingList.iteritems():		
 		moviesEmail = "Hello " + recepient + "!" + newLine * 2
-		print datetime.now() + "Creating mail"
+		print str(datetime.now()) + "Creating mail"
 		moviesEmail = moviesEmail + movieFinderUtils.getMoviesMail()
-		print datetime.now() +  "Sending Mail"
+		print str(datetime.now()) +  "Sending Mail"
 		mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
 	
 	# Sleep for 1 hour
