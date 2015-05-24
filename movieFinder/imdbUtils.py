@@ -18,6 +18,7 @@ def getImdbByMovieId(movieId):
 # The 1st IMDB search result (by movie name) is taken into account
 # The rating is on 10-100 scale
 def getMovieRatingAndGenre(movieName):	
+
 	# Get first movie id 			
 	titleSearchResults = getImdbSearchResults(movieName)
 	searchJson = titleSearchResults.readline()

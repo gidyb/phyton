@@ -16,15 +16,18 @@ def getTopDvdRentalsMovieNamesAndRatings():
 	
 	
 # Returns the movie names and average ratings from the given RottenTomatoes search URL
+# Return format is a list of {"movieName":XXX,"movieRating":YYY} objects
 def getMovieNamesAndRatingsFromJson(searchURL):
 	searchResultsJSON = urllib.urlopen(searchURL)
 	movieTitles = json.load(searchResultsJSON)['movies']
 	
-	movieNamesRatings = {}
-	
+	movieNamesRatingsList = []
+
 	for movieInfo in movieTitles:
 		averageRating = int((movieInfo['ratings']['critics_score'] + movieInfo['ratings']['audience_score']) / 2)	
-		movieNamesRatings[movieInfo['title']] = averageRating
+		movieNameRating = {"movieName":movieInfo['title'], "movieRating":averageRating}
+		movieNamesRatingsList.append(movieNameRating)
+		#movieNamesRatings[movieInfo['title']] = averageRating
 	
-	return movieNamesRatings	
+	return movieNamesRatingsList	
 	

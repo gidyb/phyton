@@ -20,21 +20,6 @@ def getAverageRating(imdbRating, tomatoesRating, metacriticRating):
 	
 	return int(sum(validRatings)/len(validRatings))
 	
-
-# Prints a list of the given movies, their genre and the average rating between various sites
-# Needed for the CMD version - MovieFinder
-def printMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
-	for movie,tomatoesRating in movieNamesAndTomatoesRatings.iteritems():
-		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movie)
-		metacriticRating = metacriticUtils.getMovieRating(movie)
-		averageRating = getAverageRating(imdbRating, tomatoesRating, metacriticRating)
-		
-		# DEBUG PRINT - all ratings
-		print movie + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", tomatoesRating, " MetaCritic: ", metacriticRating, " Average:", averageRating
-		
-		print movie + "  (" + genre + "),  " + "Rating: ", averageRating
-	
-		
 # Prints the given label nicely	to the cmd
 def printLabel(label):
 	print "**********************"
@@ -49,15 +34,17 @@ def	getMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
 
 	moviesList = []
 
-	for movie,tomatoesRating in movieNamesAndTomatoesRatings.iteritems():
-		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movie)
-		metacriticRating = metacriticUtils.getMovieRating(movie)
-		averageRating = getAverageRating(imdbRating, tomatoesRating, metacriticRating)
+	for movieInfo in movieNamesAndTomatoesRatings:
+		movieName = movieInfo["movieName"]
+		movieTomatoRating = movieInfo["movieRating"]
+		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movieName)
+		metacriticRating = metacriticUtils.getMovieRating(movieName)
+		averageRating = getAverageRating(imdbRating, movieTomatoRating, metacriticRating)
 		
 		# DEBUG PRINT - all ratings
-		print movie + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", tomatoesRating, " MetaCritic: ", metacriticRating, " Average:", averageRating
+		print movieName + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", movieTomatoRating, " MetaCritic: ", metacriticRating, " Average:", averageRating
 	
-		movieLine = movie + "  (" + genre + "),  " + "Rating: " + str(averageRating)	
+		movieLine = movieName + "(" + genre + "),  " + "Rating: " + str(averageRating)	
 		moviesList.append(movieLine)
 
 	return moviesList
