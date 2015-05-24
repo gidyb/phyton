@@ -3,31 +3,31 @@ import json
 
 # Returns the 10 Top US Box Office movie names and their average
 # (critics & audience) ratings
-def getTopBoxOfficeMovieNamesAndRatings():
+def getTopBoxOfficeMovies():
 	bestMoviesURL = "http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=8b22adt8wam7ned65u2nreqq"
-	return getMovieNamesAndRatingsFromJson(bestMoviesURL)	
+	return getMoviesInfoFromJson(bestMoviesURL)	
 
 
 # Returns the 10 Top US DVD Rentals movie names and their average
 # (critics & audience) ratings
-def getTopDvdRentalsMovieNamesAndRatings():
+def getTopDvdRentalsMovies():
 	bestDVDsURL = "http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=8b22adt8wam7ned65u2nreqq"
-	return getMovieNamesAndRatingsFromJson(bestDVDsURL)	
+	return getMoviesInfoFromJson(bestDVDsURL)	
 	
 	
 # Returns the movie names and average ratings from the given RottenTomatoes search URL
-# Return format is a list of {"movieName":XXX,"movieRating":YYY} objects
-def getMovieNamesAndRatingsFromJson(searchURL):
+# Return format is a list of {"movieName":XXX,"movieRating":RR,"movieYear":YYYY} objects
+def getMoviesInfoFromJson(searchURL):
 	searchResultsJSON = urllib.urlopen(searchURL)
 	movieTitles = json.load(searchResultsJSON)['movies']
 	
-	movieNamesRatingsList = []
+	moviesInfo = []
 
 	for movieInfo in movieTitles:
 		averageRating = int((movieInfo['ratings']['critics_score'] + movieInfo['ratings']['audience_score']) / 2)	
-		movieNameRating = {"movieName":movieInfo['title'], "movieRating":averageRating}
-		movieNamesRatingsList.append(movieNameRating)
-		#movieNamesRatings[movieInfo['title']] = averageRating
+		curMovieInfo = {"movieName":movieInfo['title'], "movieRating":averageRating, "movieYear":movieInfo['year']}
+		moviesInfo.append(curMovieInfo)
+
 	
-	return movieNamesRatingsList	
+	return moviesInfo	
 	

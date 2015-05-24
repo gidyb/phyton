@@ -18,5 +18,5 @@ while(True):
 		print str(datetime.now()) +  ": Sending Mail"
 		mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
 	
-	# Sleep for 1 week
-	time.sleep(604800)
+	# Sleep for 2 days
+	time.sleep(172800)

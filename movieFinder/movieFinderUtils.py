@@ -1,6 +1,7 @@
 import imdbUtils
 import metacriticUtils
 import rottenTomatoesUtils
+import ytsUtils
 from datetime import datetime
 
 newLine = '\r\n'
@@ -29,33 +30,40 @@ def printLabel(label):
 	
 
 # Returns a list of the given movies, their genre and the average rating between various sites
-# Needed for the Server version - MovieMaster	
-def	getMovieNamesAndAverageRatings(movieNamesAndTomatoesRatings):
+# Return format is a list of {"movieName":XXX,"genre":GGG,"year":YYYY,"averageRating":RR} objects
+def	getMovieNamesAndAverageRatings(tomatoMoviesInfo):
 
 	moviesList = []
 
-	for movieInfo in movieNamesAndTomatoesRatings:
+	for movieInfo in tomatoMoviesInfo:
 		movieName = movieInfo["movieName"]
 		movieTomatoRating = movieInfo["movieRating"]
+		movieYear = movieInfo["movieYear"]
+		
 		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movieName)
 		metacriticRating = metacriticUtils.getMovieRating(movieName)
 		averageRating = getAverageRating(imdbRating, movieTomatoRating, metacriticRating)
 		
 		# DEBUG PRINT - all ratings
-		print movieName + "  (" + genre + "),  " + "Imdb: ", imdbRating , " Tomato: ", movieTomatoRating, " MetaCritic: ", metacriticRating, " Average:", averageRating
+		print movieName + "  (" + genre + "," + str(movieYear) + "),  " + "Imdb: ", imdbRating , " Tomato: ", movieTomatoRating, " MetaCritic: ", metacriticRating, " Average:", str(averageRating)
 	
-		movieLine = movieName + "(" + genre + "),  " + "Rating: " + str(averageRating)	
-		moviesList.append(movieLine)
-
+		curMovie = {"movieName":movieName,"genre":genre,"year":movieYear,"averageRating":averageRating}
+		moviesList.append(curMovie)
+		
 	return moviesList
-	
-	
+
+
 # Returns an email version of the given movies list, which include movie names and their ratings
 def getEmailFormatList(moviesList):
 	emailMsg = ""
 
-	for movie in moviesList:
-		emailMsg = emailMsg + movie + newLine
+	for movieInfo in moviesList:
+
+		torrentLink = ytsUtils.getTorrentLink(movieInfo)
+		
+		movieLine = movieInfo["movieName"] + " (" + movieInfo["genre"] + "),  " + "Rating: " + str(movieInfo["averageRating"]) + newLine
+		movieLine += "Torrent: " + torrentLink + newLine
+		emailMsg += movieLine + newLine
 		
 	return emailMsg	
 
@@ -67,20 +75,23 @@ def getMoviesMail():
 	moviesEmail = "This is your MovieMaster update for " + curTime.strftime("%A, %d of %B %Y, %H:%M") + newLine * 2
 	
 	# Top Box Office Movies
-	moviesEmail = moviesEmail + "Top Box Office Movies" + newLine
-	moviesEmail = moviesEmail + "*************************" + newLine
+	moviesEmail += "Top Box Office Movies" + newLine
+	moviesEmail += "*************************" + newLine
 
-	topBoxOffice = rottenTomatoesUtils.getTopBoxOfficeMovieNamesAndRatings()
-	moviesList = getMovieNamesAndAverageRatings(topBoxOffice)
-	moviesEmail = moviesEmail + getEmailFormatList(moviesList)
+	moviesEmail = addMoviesToMail(moviesEmail, rottenTomatoesUtils.getTopBoxOfficeMovies())
 
 	# Top DVD Rentals
-	moviesEmail = moviesEmail + newLine 
-	moviesEmail = moviesEmail + "Top DVD Rentals" + newLine
-	moviesEmail = moviesEmail + "*******************" + newLine
+	moviesEmail += newLine 
+	moviesEmail += "Top DVD Rentals" + newLine
+	moviesEmail += "*******************" + newLine
 
-	topDVDs = rottenTomatoesUtils.getTopDvdRentalsMovieNamesAndRatings()
-	dvdsList = getMovieNamesAndAverageRatings(topDVDs)
-	moviesEmail = moviesEmail + getEmailFormatList(dvdsList)
+	moviesEmail = addMoviesToMail(moviesEmail, rottenTomatoesUtils.getTopDvdRentalsMovies())
 
 	return moviesEmail	
+	
+# Adds the info for the given movies to the given mail, and returns the updated mail	
+def addMoviesToMail(mail, moviesInfo):
+	moviesList = getMovieNamesAndAverageRatings(moviesInfo)
+	mail += getEmailFormatList(moviesList)
+	return mail
+
