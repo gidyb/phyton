@@ -1,7 +1,8 @@
 import smtplib
 
 class GmailSender(object):
-    def __init__(self):
+	
+    def createSession(self):
         self.email = "gidysmoviemaster@gmail.com"
         self.password = "moviemaster123"
         self.server = 'smtp.gmail.com'
@@ -15,7 +16,8 @@ class GmailSender(object):
 
     def send_message(self, addressTo, subject, body):
 		# Create new SMTP session each time to avoid SMTPServerDisconnect exception (while idle)
-		self.session.login(self.email, self.password)
+		self.createSession()
+		
 		# Prepare msg
 		headers = [
             "From: " + self.email,
@@ -28,6 +30,8 @@ class GmailSender(object):
             self.email,
             addressTo,
             headers + "\r\n\r\n" + body)
+			
+
 
 def getMailingList():
 	mailingList = {}

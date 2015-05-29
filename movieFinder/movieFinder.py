@@ -19,5 +19,5 @@ while(True):
 		mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
 	
 	# Sleep for 2 days
-	#time.sleep(172800)
-        time.sleep(7200)
+	time.sleep(172800)
+
