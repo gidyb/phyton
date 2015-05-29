@@ -14,7 +14,11 @@ class GmailSender(object):
         self.session = session
 
     def send_message(self, addressTo, subject, body):
-        ''' This must be removed '''
+		
+		# Create new SMTP session each time to avoid SMTPServerDisconnect exception (while idle)
+		self.session.login(self.email, self.password)
+		
+		# Prepare msg
         headers = [
             "From: " + self.email,
             "Subject: " + subject,
