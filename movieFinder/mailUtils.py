@@ -35,7 +35,7 @@ class GmailSender(object):
 			
 # Return the mailing list as a list of {name:XX, email:YY} json rows
 def getMailingList():
-	with open('mailingListTest.json') as mailing_list:    
+	with open('mailingList.json') as mailing_list:    
 		mailingList = json.load(mailing_list)
 		
 	return mailingList["users"]	
