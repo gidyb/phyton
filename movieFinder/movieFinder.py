@@ -7,17 +7,17 @@ from datetime import datetime, timedelta
 newLine = '\r\n'
 
 mailSender = mailUtils.GmailSender()
-mailingList = mailUtils.getMailingList()
 
 while(True):
 
-	for recepient, address in mailingList.iteritems():		
-		moviesEmail = "Hello " + recepient + "!" + newLine * 2
+	for recepient in mailUtils.getMailingList():
+		moviesEmail = "Hello " + recepient["name"] + "!" + newLine * 2
 		print str(datetime.now()) + ": Creating mail"
 		moviesEmail = moviesEmail + movieFinderUtils.getMoviesMail()
 		print str(datetime.now()) +  ": Sending Mail"
-		mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
+		mailSender.send_message(recepient["email"],"Your MovieFinder Update", moviesEmail)
 	
-	# Sleep for 2 days
-	time.sleep(172800)
+	# Sleep for 7 days
+	time.sleep(604800)
+	
 

@@ -1,4 +1,5 @@
 import smtplib
+import json
 
 class GmailSender(object):
 	
@@ -31,12 +32,10 @@ class GmailSender(object):
             addressTo,
             headers + "\r\n\r\n" + body)
 			
-
-
+			
+# Return the mailing list as a list of {name:XX, email:YY} json rows
 def getMailingList():
-	mailingList = {}
-	
-	mailingList["Gidy"] = "gidy.basin@gmail.com"
-	# More users....
-	
-	return mailingList
+	with open('mailingList.json') as mailing_list:    
+		mailingList = json.load(mailing_list)
+		
+	return mailingList["users"]	
