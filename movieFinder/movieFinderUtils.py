@@ -4,7 +4,8 @@ import rottenTomatoesUtils
 import ytsUtils
 from datetime import datetime
 
-newLine = '\r\n'
+newLine = '<br>'
+tab = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
 # Returns the average of the given movie ratings, ignoring null ratings
 def getAverageRating(imdbRating, tomatoesRating, metacriticRating):
@@ -21,16 +22,8 @@ def getAverageRating(imdbRating, tomatoesRating, metacriticRating):
 	
 	return int(sum(validRatings)/len(validRatings))
 	
-# Prints the given label nicely	to the cmd
-def printLabel(label):
-	print "**********************"
-	print label
-	print "**********************"
-	print		
-	
-
-# Returns a list of the given movies, their genre and the average rating between various sites
-# Return format is a list of {"movieName":XXX,"genre":GGG,"year":YYYY,"averageRating":RR} objects
+# Returns a list of various params for the given movies
+# Return format is a list of {"movieName":XXX,"genre":GGG,"year":YYYY,"averageRating":RR,"imdbLink":LL} objects
 def	getMovieNamesAndAverageRatings(tomatoMoviesInfo):
 
 	moviesList = []
@@ -40,14 +33,14 @@ def	getMovieNamesAndAverageRatings(tomatoMoviesInfo):
 		movieTomatoRating = movieInfo["movieRating"]
 		movieYear = movieInfo["movieYear"]
 		
-		imdbRating, genre = imdbUtils.getMovieRatingAndGenre(movieName)
+		imdbRating, genre, imdbLink = imdbUtils.getMovieRatingAndGenre(movieName)
 		metacriticRating = metacriticUtils.getMovieRating(movieName)
 		averageRating = getAverageRating(imdbRating, movieTomatoRating, metacriticRating)
 		
 		# DEBUG PRINT - all ratings
 		print movieName + "  (" + genre + "," + str(movieYear) + "),  " + "Imdb: ", imdbRating , " Tomato: ", movieTomatoRating, " MetaCritic: ", metacriticRating, " Average:", str(averageRating)
 	
-		curMovie = {"movieName":movieName,"genre":genre,"year":movieYear,"averageRating":averageRating}
+		curMovie = {"movieName":movieName,"genre":genre,"year":movieYear,"averageRating":averageRating,"imdbLink":imdbLink}
 		moviesList.append(curMovie)
 		
 	return moviesList
@@ -56,14 +49,22 @@ def	getMovieNamesAndAverageRatings(tomatoMoviesInfo):
 # Returns an email version of the given movies list, which include movie names and their ratings
 def getEmailFormatList(moviesList):
 	emailMsg = ""
+	count = 1
 
 	for movieInfo in moviesList:
 
-		torrentLink = ytsUtils.getTorrentLink(movieInfo)
+		movieLink = "<a href=\"" + movieInfo["imdbLink"] + "\">" + movieInfo["movieName"] + "</a>"
 		
-		movieLine = movieInfo["movieName"] + " (" + movieInfo["genre"] + "),  " + "Rating: " + str(movieInfo["averageRating"]) + newLine
-		movieLine += "Torrent: " + torrentLink + newLine
+		movieLine = str(count) + ") " + movieLink + " (" + movieInfo["genre"] + ")," + tab + "Average Rating: " + str(movieInfo["averageRating"])
+
+		# Look for a torrent link, and add it if found
+		torrentLink = ytsUtils.getTorrentLink(movieInfo)
+		if (torrentLink <> ""):
+			movieLine += tab + "<a href=\"" + torrentLink + "\">torrent</a>"	
+		
 		emailMsg += movieLine + newLine
+		
+		count += 1
 		
 	return emailMsg	
 
@@ -72,18 +73,18 @@ def getMoviesMail():
 
 	curTime = datetime.now()
 	
-	moviesEmail = "This is your MovieMaster update for " + curTime.strftime("%A, %d of %B %Y, %H:%M") + newLine * 2
+	moviesEmail = "<h2>This is your MovieMaster update for " + curTime.strftime("%A, %d of %B %Y, %H:%M") + "</h2>"
 	
 	# Top Box Office Movies
-	moviesEmail += "Top Box Office Movies" + newLine
-	moviesEmail += "*************************" + newLine
+	moviesEmail += "<b> Top Box Office Movies </b>" + newLine
+	moviesEmail += "<b> ***************************** </b>" + newLine
 
 	moviesEmail = addMoviesToMail(moviesEmail, rottenTomatoesUtils.getTopBoxOfficeMovies())
 
 	# Top DVD Rentals
 	moviesEmail += newLine 
-	moviesEmail += "Top DVD Rentals" + newLine
-	moviesEmail += "*******************" + newLine
+	moviesEmail += "<b> Top DVD Rentals </b> "+ newLine
+	moviesEmail += "<b> ********************** </b> " + newLine
 
 	moviesEmail = addMoviesToMail(moviesEmail, rottenTomatoesUtils.getTopDvdRentalsMovies())
 

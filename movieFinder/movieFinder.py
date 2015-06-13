@@ -4,19 +4,23 @@ import mailUtils
 import time
 from datetime import datetime, timedelta
 
-newLine = '\r\n'
+newLine = '<br>'
 
 mailSender = mailUtils.GmailSender()
-mailingList = mailUtils.getMailingList()
 
 while(True):
 
-	for recepient, address in mailingList.iteritems():		
-		moviesEmail = "Hello " + recepient + "!" + newLine * 2
-		print str(datetime.now()) + ": Creating mail"
-		moviesEmail = moviesEmail + movieFinderUtils.getMoviesMail()
-		print str(datetime.now()) +  ": Sending Mail"
-		mailSender.send_message(address,"Your MovieFinder Update", moviesEmail)
+	# Compute movies
+	print str(datetime.now()) + ": Building Movie Mail"
+	moviesPart = movieFinderUtils.getMoviesMail()
+
+	# Send to all mailing list
+	for recepient in mailUtils.getMailingList():
+		print str(datetime.now()) +  ": Sending Mail to: " + recepient["name"]
+		moviesEmail = "<h1> Hello " + recepient["name"] + "! </h1>"
+		moviesEmail = moviesEmail + moviesPart
+		mailSender.send_message(recepient["email"],"Your MovieMaster Update", moviesEmail)
 	
-	# Sleep for a week 
+	# Sleep for 7 days
 	time.sleep(604800)
+	
