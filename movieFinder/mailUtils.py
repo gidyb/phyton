@@ -25,7 +25,7 @@ class GmailSender(object):
             "Subject: " + subject,
             "To: " + addressTo,
             "MIME-Version: 1.0",
-           "Content-Type: text/plain"]
+           "Content-Type: text/html"]
 		headers = "\r\n".join(headers)
 		self.session.sendmail(
             self.email,
@@ -35,7 +35,7 @@ class GmailSender(object):
 			
 # Return the mailing list as a list of {name:XX, email:YY} json rows
 def getMailingList():
-	with open('mailingList.json') as mailing_list:    
+	with open('mailingListTest.json') as mailing_list:    
 		mailingList = json.load(mailing_list)
 		
 	return mailingList["users"]	

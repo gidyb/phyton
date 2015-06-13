@@ -4,7 +4,8 @@ import rottenTomatoesUtils
 import ytsUtils
 from datetime import datetime
 
-newLine = '\r\n'
+newLine = '<br>'
+tab = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
 # Returns the average of the given movie ratings, ignoring null ratings
 def getAverageRating(imdbRating, tomatoesRating, metacriticRating):
@@ -59,10 +60,13 @@ def getEmailFormatList(moviesList):
 
 	for movieInfo in moviesList:
 
+		movieLine = movieInfo["movieName"] + " (" + movieInfo["genre"] + ")," + tab + "Average Rating: " + str(movieInfo["averageRating"])
+
+		# Look for a torrent link, and add it if found
 		torrentLink = ytsUtils.getTorrentLink(movieInfo)
+		if (torrentLink <> ""):
+			movieLine += tab + "<a href=\"" + torrentLink + "\">torrent</a>"	
 		
-		movieLine = movieInfo["movieName"] + " (" + movieInfo["genre"] + "),  " + "Rating: " + str(movieInfo["averageRating"]) + newLine
-		movieLine += "Torrent: " + torrentLink + newLine
 		emailMsg += movieLine + newLine
 		
 	return emailMsg	
@@ -72,18 +76,18 @@ def getMoviesMail():
 
 	curTime = datetime.now()
 	
-	moviesEmail = "This is your MovieMaster update for " + curTime.strftime("%A, %d of %B %Y, %H:%M") + newLine * 2
+	moviesEmail = "<h2>This is your MovieMaster update for " + curTime.strftime("%A, %d of %B %Y, %H:%M") + "</h2>"
 	
 	# Top Box Office Movies
-	moviesEmail += "Top Box Office Movies" + newLine
-	moviesEmail += "*************************" + newLine
+	moviesEmail += "<b> Top Box Office Movies </b>" + newLine
+	moviesEmail += "<b> ***************************** </b>" + newLine
 
 	moviesEmail = addMoviesToMail(moviesEmail, rottenTomatoesUtils.getTopBoxOfficeMovies())
 
 	# Top DVD Rentals
 	moviesEmail += newLine 
-	moviesEmail += "Top DVD Rentals" + newLine
-	moviesEmail += "*******************" + newLine
+	moviesEmail += "<b> Top DVD Rentals </b> "+ newLine
+	moviesEmail += "<b> ********************** </b> " + newLine
 
 	moviesEmail = addMoviesToMail(moviesEmail, rottenTomatoesUtils.getTopDvdRentalsMovies())
 
