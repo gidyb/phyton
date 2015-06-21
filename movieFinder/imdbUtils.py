@@ -18,8 +18,8 @@ def getMovieId(movieName):
 	return id
 
 	
-# Returns the rating and genre of the movie with the given movieId
-# return format is (rating, genre)
+# Returns the rating of the movie with the given movieId, or "N/A" if the
+# movie was not found on IMDB
 #
 # IMPORTANT: omdbapi.com is NOT used because it is not up to date.
 #
@@ -34,7 +34,7 @@ def getMovieRating(movieId):
 	
 	return rating
 	
-# Returns the result of searching IMDB by movie id using omdbapi.com
+# Returns the result of searching IMDB (via omdbapi.com) by movie id using omdbapi.com
 #
 # omdbapi.com is used here only for getting the movie genre
 #
@@ -44,7 +44,10 @@ def getMovieById(movieId):
 	return urllib.urlopen(movieUrl)
 	
 	
-# Returns the IMDB rating (if such exists, '-1' otherwise), genre and a link to the IMDB movie page of the given movie name in (rating,genre,link) format
+# Returns the IMDB rating, genre and a link to the IMDB movie page of the given movie name 
+# in (rating,genre,link) format
+#
+# ("N/A","N/A","N/A") is returend if the movie was not found on IMDB
 #
 # The 1st IMDB search result (by movie name) is taken into account
 # The rating is on 10-100 scale
@@ -54,8 +57,14 @@ def getMovieRatingAndGenre(movieName):
 	movieId = getMovieId(movieName)	
 	
 	# Get movie rating
-	rating = getMovieRating(movieId)
-	rating = int(float(rating) * 10)
+	try:
+		rating = getMovieRating(movieId)
+		rating = int(float(rating) * 10)
+		moviePageLink = "http://www.imdb.com/title/" + movieId
+	except ValueError:
+		# Movie was not found on IMDB
+		rating = "N/A"
+		moviePageLink = "N/A"
 	
 	# Get movie genre
 	idSearchResults = getMovieById(movieId)
@@ -64,9 +73,6 @@ def getMovieRatingAndGenre(movieName):
 		genre = idSearchJson['Genre']
 	except KeyError:
 		genre = "N/A"
-	
-	
-	moviePageLink = "http://www.imdb.com/title/" + movieId
 	
 	return rating,genre,moviePageLink
 	

@@ -53,10 +53,11 @@ def getEmailFormatList(moviesList):
 
 	for movieInfo in moviesList:
 
-		movieLink = "<a href=\"" + movieInfo["imdbLink"] + "\">" + movieInfo["movieName"] + "</a>"
-		
-		movieLine = str(count) + ") " + movieLink + " (" + movieInfo["genre"] + ")," + tab + "Average Rating: " + str(movieInfo["averageRating"])
-
+		if (movieInfo["imdbLink"] <> "N/A"):
+			movieLink = "<a href=\"" + movieInfo["imdbLink"] + "\">" + movieInfo["movieName"] + "</a>"
+			movieLine = str(count) + ") " + movieLink + " (" + movieInfo["genre"] + ")," + tab + "Average Rating: " + str(movieInfo["averageRating"])
+		else:
+			movieLine = str(count) + ") " + movieInfo["movieName"] + tab + "Average Rating: " + str(movieInfo["averageRating"])			
 		# Look for a torrent link, and add it if found
 		torrentLink = ytsUtils.getTorrentLink(movieInfo)
 		if (torrentLink <> ""):
