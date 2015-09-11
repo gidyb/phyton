@@ -21,7 +21,11 @@ def getMovieRating(movieName):
 		# Timeout from metacritic
 		return "N/A"
 	
-	result = jsonResponse.body['result']
+	try:
+		result = jsonResponse.body['result']
+	except KeyError:
+		# Movie was not found in Metacritic
+		return "N/A"
 	
 	if (result):
 		try:
