@@ -5,7 +5,7 @@ class GmailSender(object):
 	
     def createSession(self):
         self.email = "gidysmoviemaster@gmail.com"
-        self.password = "moviemaster123"
+        self.password = "moviemaster1234"
         self.server = 'smtp.gmail.com'
         self.port = 587
         session = smtplib.SMTP(self.server, self.port)        

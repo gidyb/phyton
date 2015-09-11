@@ -68,11 +68,15 @@ def getMovieRatingAndGenre(movieName):
 	
 	# Get movie genre
 	idSearchResults = getMovieById(movieId)
-	idSearchJson = json.loads(idSearchResults.readline())	
 	try:
+                idSearchJson = json.loads(idSearchResults.readline())
 		genre = idSearchJson['Genre']
-	except KeyError:
+	except ValueError:
+		# Movie was not found on IMDB
 		genre = "N/A"
+ 	except KeyError:
+		genre = "N/A"
+	
 	
 	return rating,genre,moviePageLink
 	

@@ -24,6 +24,10 @@ def getMovieRating(movieName):
 	result = jsonResponse.body['result']
 	
 	if (result):
-		return int(float(result['userscore']) * 10)	
+		try:
+			return int(float(result['userscore']) * 10)	
+		except TypeError:
+			# Something is wrong with the userscore or maybe it wasn't found
+			return "N/A"
 	else:
 		return "N/A"
