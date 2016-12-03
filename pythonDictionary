@@ -40,6 +40,7 @@
 # list1.append("c")
 # for a in list1:
 #	print a
+# sum(list1) - works if list1 is all numbers
 
 # Strings
 # a10 = "a" * 10
